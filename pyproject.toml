@@ -1,0 +1,200 @@
+[project]
+name = "fastfood-health-prediction"
+version = "1.0.0"
+description = "Fast Food Consumption Health Impact Prediction API"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "scikit-learn>=1.3.2",
+    "pandas>=2.1.3",
+    "numpy>=1.26.2",
+    "matplotlib>=3.8.2",
+    "seaborn>=0.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.0",
+    "pre-commit>=3.5.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+]
+docker = [
+    "docker>=6.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/fastfood-health-prediction"
+Repository = "https://github.com/yourusername/fastfood-health-prediction"
+Documentation = "https://github.com/yourusername/fastfood-health-prediction#readme"
+
+[project.scripts]
+train = "src.train:main"
+predict = "src.predict:example_usage"
+serve = "src.app:main"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src"]
+known_third_party = ["fastapi", "pydantic", "sklearn", "pandas", "numpy"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--verbose --tb=short --cov=src --cov-report=term-missing --cov-report=html"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\bProtocol\b:",
+    "@(abc\.)?abstractmethod",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["S101"]  # Allow assert in tests
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+exclude = ["tests*", "notebooks*", "docs*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.json", "*.yml", "*.yaml"]
+
+[project.entry-points."console_scripts"]
+fastfood-train = "src.train:main"
+fastfood-predict = "src.predict:example_usage"
+fastfood-api = "src.app:main"
+
+[tool.poetry]
+# Alternative configuration for poetry users
+# (commented out since we're using setuptools + uv)
+#
+# [tool.poetry]
+# name = "fastfood-health-prediction"
+# version = "1.0.0"
+# description = "Fast Food Consumption Health Impact Prediction API"
+# authors = ["Your Name <your.email@example.com>"]
+# license = "MIT"
+# readme = "README.md"
+
+#
+# [tool.poetry.dependencies]
+# python = "^3.11"
+# fastapi = "^0.104.1"
+# uvicorn = {extras = ["standard"], version = "^0.24.0"}
+# pydantic = "^2.5.0"
+# scikit-learn = "^1.3.2"
+# pandas = "^2.1.3"
+# numpy = "^1.26.2"
+# matplotlib = "^3.8.2"
+# seaborn = "^0.13.0"
+#
+# [tool.poetry.group.dev.dependencies]
+# pytest = "^7.4.0"
+# pytest-cov = "^4.1.0"
+# black = "^23.0.0"
+# flake8 = "^6.1.0"
+# mypy = "^1.7.0"
+# pre-commit = "^3.5.0"
+# jupyter = "^1.0.0"
+#
+# [tool.poetry.scripts]
+# train = "src.train:main"
+# predict = "src.predict:example_usage"
+# serve = "src.app:main"
+#
+# [build-system]
+# requires = ["poetry-core"]
+# build-backend = "poetry.core.masonry.api"
